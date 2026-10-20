@@ -1,5 +1,14 @@
 # 首里程碑验证记录
 
+## 2026-10-20 GitHub Pages部署与线上验收（当前）
+
+- 在线入口：[动作编排](https://mhdfy1988.github.io/action-composer/)。发布源码提交为`879e20b749a8235d96859ab6fa4a9323b48d425f`，[Actions运行39412183408](https://github.com/mhdfy1988/action-composer/actions/runs/39412183408)构建与部署均成功。包版本仍为0.1.0，没有创建版本标签或GitHub Release，也没有接入动作工坊。
+- 首页使用相对资源路径；静态构建复用既有打包和OpenCV准备逻辑，只输出8个白名单文件。源码、实验页、私人素材、缓存和测试输出不进入站点产物。额外文件的负向检查按预期阻止构建，移除本轮测试文件后重新构建通过。
+- 本地format:check、check:source、56项测试、build、test:components、默认入口test:browser及静态子路径test:pages全部通过。子路径验证使用临时端口并已关闭，8914原服务（PID11556）和用户页面未重启或刷新。
+- 直接针对线上URL运行完整test:browser通过：覆盖导入、排序、精灵图、范围调整、撤销／恢复／重置、OpenCV Worker对齐、播放及PNG／ZIP像素回读；未降低原断言。使用合成素材，未指定私人素材夹具，素材仍在浏览器本地处理。已目视检查本轮线上工作台及横向导入弹窗截图。
+- 线上首页HTTP 200，build-info.json的revision与发布提交一致；首页、JS、CSS、Worker、OpenCV及其许可共6个公开运行资源的SHA256均与清单一致。清单另记录产物中的.nojekyll标记；它的线上地址返回404，不是应用运行资源。首次HTTP摘要检查混淆了产物标记和公开资源，明确两者边界后重验通过，无需修改生产路径或添加fallback。
+- 官方Actions出现Node运行时迁移及ubuntu-latest迁移提示，但实际构建、子路径回归和部署均成功。文档收口单独提交；工作流不因仅文档变更重新部署，因此仓库最新文档提交可晚于上述站点源码提交。
+
 ## 2026-10-20 GitHub源码提交与核验
 
 - 用户授权账号mhdfy1988及公开可见性，目标仓库为[mhdfy1988/action-composer](https://github.com/mhdfy1988/action-composer)，主分支main。已核对认证账号、确认不存在同名仓库后新建，提交身份仅在本项目配置，使用GitHub隐私邮箱；不修改全局Git配置。
