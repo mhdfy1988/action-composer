@@ -4,6 +4,8 @@
 
 在本项目目录运行。当前只处理本次打开的素材，没有工程操作入口、自动保存或刷新恢复。刷新／关闭会丢失调整，离开前请导出；导出的图片是烘焙结果，不是可恢复编辑历史的存档。
 
+在线入口：[动作编排 · GitHub Pages](https://mhdfy1988.github.io/action-composer/)。网页与本地版使用同一套处理逻辑，图片在浏览器本地处理，不上传；首次打开需要联网加载页面及运行库。线上版同样不自动保存调整。
+
 ## 启动
 
 需要 Node.js 24 和 Chrome。首次获取源码：
@@ -63,6 +65,39 @@ Chrome 打开 [http://127.0.0.1:8914/](http://127.0.0.1:8914/)。服务会构建
 
 普通撤销保留最近 80 笔元数据快照；范围回溯另保留本次会话的轻量变换记录，不持有图片副本，超过撤销窗口仍能按范围重置。刷新后两类记录均丢失。暂不提供云存储或自动恢复。
 
+## 技术与参考方案
+
+### 实际使用的技术
+
+| 技术                                                                                                                      | 用途与选择理由                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 原生 JavaScript 模块、Canvas 2D、Web Worker                                                                               | 组件化界面、图片预览与绘制、后台匹配；沿用浏览器能力，不为当前单工作台引入大型前端框架或后端图片处理服务           |
+| [OpenCV.js 4.13.0](https://docs.opencv.org/4.13.0/d8/dd1/tutorial_js_template_matching.html)                              | 首帧模板匹配；直接使用现成的`matchTemplate`／`minMaxLoc`，项目负责透明掩膜、多尺度搜索与坐标映射，不手写相似度内核 |
+| [Ajv 8.20.0](https://ajv.js.org/guide/getting-started.html)                                                               | 运行时数据结构校验，配合项目语义检查拒绝无效清单，不只依赖字段约定                                                 |
+| [fflate 0.8.3](https://github.com/101arrowz/fflate)                                                                       | 素材ZIP打包与测试回读，不自行实现ZIP格式                                                                           |
+| [esbuild 0.28.2](https://esbuild.github.io/api/#serve)                                                                    | 模块与样式构建、开发监听和本地服务，不另写开发服务器                                                               |
+| [Playwright](https://playwright.dev/)／[fast-png](https://github.com/image-js/fast-png)／[Prettier](https://prettier.io/) | 开发期浏览器回归、PNG夹具与像素回读、格式检查；不进入工具的图片处理运行时                                          |
+
+上表为本项目实际采用的技术，不是推荐版本清单。npm版本以锁文件为准，OpenCV运行库另固定版本及SHA-256；许可与完整版本见[第三方声明](THIRD_PARTY_NOTICES.md)。
+
+### 参考项目与借鉴范围
+
+| 来源                                                                                                                                                                               | 借鉴的方案                                                         | 本项目的取舍                                                                                           |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| [XSXB-Frame-Tuner：轻量版输出布局](https://github.com/sparklecatta-lang/XSXB-Frame-Tuner/blob/cb061e15132b9250feebd34a18a3fd023197837c/tools/frame_tuner_lite/public/lite.js#L130) | 测量目标动作各帧的可见范围，合并边界，统一原点、画布与留白         | 参考输出语义，由本项目共享测量／绘制链路实现；多动作分别输出，不复制其工程格式、多层系统或服务接口     |
+| [FrameBaker：动画输出](https://github.com/taotao7/FrameBaker/blob/f9846c985156f83f750bcc654b56cae2a1960229/apps/web/src/export.ts#L169)                                            | 全部帧共用输出范围，保留帧间相对位置；另参考其帧列表的原生拖动交互 | 只采用与单帧校准相关的思路，不引入其React界面、多选、多轨和特效结构                                    |
+| 项目早期比对小样`reference-compare-demo`                                                                                                                                           | 底部中心坐标、变换计算及相关测试用例                               | 选择性迁入计算，不整体复制旧界面、全局状态、默认私人素材或临时服务；旧水平补偿计算保留但不开放对应界面 |
+
+外部项目是方案参考，不是运行时依赖，也不意味着本工具与其数据格式兼容。来源提交、源码位置与本地落点见[复用及源码证据](docs/reuse-and-contracts.md)；首帧算法依据见[OpenCV模板匹配定义](https://docs.opencv.org/4.13.0/de/da9/tutorial_template_matching.html)和[实验说明](experiments/registration/README.md#算法来源与边界)。
+
+### 当前采用的实现方案
+
+- **统一时间与坐标**：每秒60000整数刻度表示逐帧时长，从绝对播放时间定位帧；原图底部中心与项目原点建立映射，观察缩放不修改素材参数。
+- **参数化校准，共享绘制**：原图不覆盖，整组变换与逐帧修正分别保存；预览、内容测量和导出共用`placement`／`drawFrame`，避免“预览正确、导出偏移”。
+- **正式数据与拖动草稿分离**：`Session`统一管理正式状态和历史，拖动预览不直接改正式数据，确认只提交一笔；重置按整组／当前帧的真实调整记录回溯，而不是清零。
+- **有边界的自动对齐**：在Worker中以当前动作首帧匹配其他动作，成功项统一提交；失败保留原样，取消不发布暂存结果，不切回轮廓估算或AI模型。姿态与外观差异仍需人工检查。
+- **界面组件与业务规则分层**：模板、局部样式和事件归属组件；应用层协调选择和任务，领域层计算时间／几何，基础设施层适配解码、校验和打包。组件不通过全局ID操纵彼此内部节点。
+
 ## 开发与验证
 
 ```powershell
@@ -74,6 +109,19 @@ npm.cmd run test:components
 npm.cmd run test:browser
 ```
 
+### GitHub Pages部署
+
+```powershell
+npm.cmd run build:pages
+npm.cmd run test:pages
+```
+
+站点产物仅在`output/pages-site/`，包含首页、应用脚本与样式、匹配Worker、固定OpenCV运行库和许可、构建来源清单；不复制整个仓库、实验页、私人素材或测试输出，也不把构建产物提交到main。首页使用相对资源地址，支持项目子路径。
+
+`test:pages`使用实际压缩产物，在独立临时端口的`/action-composer/`下复用完整浏览器回归，包括后台对齐和真实下载回读；不依赖8914源码服务，也不刷新用户页面。线上同一套验收可显式设置`ACTION_COMPOSER_TEST_URL`后运行`npm.cmd run test:browser`，仅使用合成素材，不上传用户文件。
+
+[Pages工作流](.github/workflows/pages.yml)在main相关源码变化时执行检查、构建和静态子路径验收，再上传白名单产物并部署；纯说明文档修改不触发重新部署，可手动执行工作流。`build-info.json`记录被部署的源码提交及文件摘要，部署状态以[Actions运行结果](https://github.com/mhdfy1988/action-composer/actions/workflows/pages.yml)和实际线上验收为准，不以本地构建成功代替。
+
 浏览器测试要求 8914 已运行，使用隔离 Chrome，不刷新用户页面；通过正式 UI、实际下载 ZIP／PNG 和像素回读验证，不注入内部会话，也不保留隐藏工程控件。可用 `ACTION_COMPOSER_REAL_FIXTURE` 指定私人样例目录，截图／下载放在忽略的 `output/`，不分发私人素材。
 
 `test:components`同样需要8914和Chrome，在隔离页面加载组件公开接口，验证参数面板多实例隔离、局部输入绑定、工具栏意图／禁用、帧节点身份、弹窗取消重开、导出参数及窄屏样式；不启动或注入工作台会话。组件契约测试与正式入口黑盒回归分别证明局部边界和真实装配。
@@ -84,6 +132,6 @@ npm.cmd run test:browser
 
 相关资料：[提交准备与代码边界](docs/submission-readiness.md)、[协议与源码证据](docs/reuse-and-contracts.md)、[验证记录](docs/verification.md)、[开发计划](docs/development-plan.md)、[变更记录](CHANGELOG.md)、[依赖许可](THIRD_PARTY_NOTICES.md)。历史记录描述当时实现，不作为当前页面的入口说明。
 
-源码仓库：[mhdfy1988/action-composer](https://github.com/mhdfy1988/action-composer)，主分支为`main`。当前包版本`0.1.0`，尚未发布版本或部署；`private: true`用于防止误发npm包，不代表GitHub仓库私有。项目自身许可证尚未指定，第三方依赖许可见上方声明。
+源码仓库：[mhdfy1988/action-composer](https://github.com/mhdfy1988/action-composer)，主分支为`main`。当前包版本`0.1.0`，网站通过GitHub Pages工作流部署，尚无GitHub Release或版本标签；`private: true`用于防止误发npm包，不代表GitHub仓库私有。项目自身许可证尚未指定，第三方依赖许可见上方声明。
 
 动作编排当前为独立工具，尚未接入动作工坊；旧小样、XSXB、动作工坊与MotionDeck保持独立，未移动或清理其数据。

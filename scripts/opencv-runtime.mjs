@@ -4,7 +4,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export async function prepareOpenCv() {
+export async function prepareOpenCv(outputDirectory = resolve(root, 'dist')) {
   const folder = resolve(root, '.cache/opencv');
   await mkdir(folder, { recursive: true });
   const destination = resolve(folder, 'opencv-4.13.0.js');
@@ -32,7 +32,7 @@ export async function prepareOpenCv() {
     if (!response.ok) throw new Error('无法获取 OpenCV 许可证');
     await writeFile(license, await response.text(), 'utf8');
   }
-  await mkdir(resolve(root, 'dist'), { recursive: true });
-  await copyFile(destination, resolve(root, 'dist/opencv.js'));
-  await copyFile(license, resolve(root, 'dist/OPENCV-LICENSE.txt'));
+  await mkdir(outputDirectory, { recursive: true });
+  await copyFile(destination, resolve(outputDirectory, 'opencv.js'));
+  await copyFile(license, resolve(outputDirectory, 'OPENCV-LICENSE.txt'));
 }

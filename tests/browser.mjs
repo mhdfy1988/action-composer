@@ -6,6 +6,10 @@ import { resolve } from 'node:path';
 import assert from 'node:assert/strict';
 
 // 黑盒验证正式入口，不保留已移除的工程控件或注入内部会话。
+const baseUrl = new URL(process.env.ACTION_COMPOSER_TEST_URL ?? 'http://127.0.0.1:8914/');
+if (!['http:', 'https:'].includes(baseUrl.protocol) || baseUrl.search || baseUrl.hash)
+  throw new Error('浏览器测试入口必须是无查询参数的HTTP(S)目录地址');
+if (!baseUrl.pathname.endsWith('/')) baseUrl.pathname += '/';
 const root = resolve('output');
 await mkdir(root, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
@@ -19,7 +23,7 @@ const page = await context.newPage(),
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('dialog', (d) => d.dismiss());
 page.on('request', (r) => {
-  if (!/^(http:\/\/127\.0\.0\.1:8914\/|blob:|data:)/.test(r.url())) external.push(r.url());
+  if (!r.url().startsWith(baseUrl.href) && !/^(blob:|data:)/.test(r.url())) external.push(r.url());
 });
 const $ = (id) => {
   const frameAction = { copyFrames: 'copy', deleteFrames: 'delete' }[id];
@@ -199,7 +203,7 @@ async function drag(cancel = false) {
   await page.mouse.up();
 }
 try {
-  await page.goto('http://127.0.0.1:8914/');
+  await page.goto(baseUrl.href);
   for (const id of [
     'projectName',
     'saveState',

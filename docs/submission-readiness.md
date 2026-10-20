@@ -1,6 +1,6 @@
 # 提交准备与代码边界
 
-2026-10-20；包版本`0.1.0`，未发布。用户已授权将本项目源码提交至公开仓库[mhdfy1988/action-composer](https://github.com/mhdfy1988/action-composer)，主分支`main`；不创建版本标签、Release或线上部署，不修改其他项目。
+2026-10-20；包版本`0.1.0`，无版本标签或Release。源码已提交公开仓库[mhdfy1988/action-composer](https://github.com/mhdfy1988/action-composer)，主分支`main`；用户追加授权部署GitHub Pages，范围仅本项目，不修改其他项目。
 
 ## 当前代码边界
 
@@ -53,7 +53,7 @@
 
 ## 待提交文件范围
 
-应包含：`src/`、`scripts/`、`tests/`、`experiments/`、`docs/`、HTML入口、包清单和锁文件、格式配置、忽略配置、README、CHANGELOG、协作规则、第三方声明。
+应包含：`src/`、`scripts/`、`tests/`、`experiments/`、`docs/`、`.github/workflows/`、HTML入口、包清单和锁文件、格式配置、忽略配置、README、CHANGELOG、协作规则、第三方声明。
 
 禁止包含：`node_modules/`、`dist/`、`.cache/`、`output/`、私人素材、模型、日志、环境密钥、下载ZIP和旧工程文件。已配置忽略规则；它不能代替提交前人工核对实际暂存文件，不得强制加入忽略项。
 
@@ -78,3 +78,11 @@ npm.cmd run test:browser
 浏览器测试要求Chrome与8914服务，使用隔离会话，不刷新用户页面。私人真实素材只通过 `ACTION_COMPOSER_REAL_FIXTURE` 显式读取，测试产物保存在 `output/`。
 
 本轮未增加依赖或改变包版本；现有OpenCV来源、哈希和许可准备入口仍为 `scripts/opencv-runtime.mjs`。此处准备的是源码提交，不代表安装包、GitHub Release或动作工坊插件已经发布。
+
+## Pages交付边界
+
+复用现有esbuild及固定OpenCV准备器，另输出压缩的白名单静态目录，不改变8914开发构建；`test:pages`用独立静态服务模拟`/action-composer/`，复用既有黑盒用例，不降低原断言。站点只包含8个必要文件，`build-info.json`记录源码提交及SHA-256；源码目录、实验页、source map和本机输出均不进入网站。
+
+部署采用[GitHub官方Pages工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)：configure-pages、upload-pages-artifact、deploy-pages，Actions固定提交；部署任务仅授予Pages与OIDC所需写权限。构建、静态验收、上传、线上部署依次依赖，失败不继续。依据[Pages API](https://docs.github.com/en/rest/pages/pages#create-a-github-pages-site)将本站构建来源设为workflow，不使用提交整仓库或私有目录的分支发布方案。
+
+该方案只部署静态工具，不新增处理后端或素材上传；正式站点需实际验收后台Worker、运行库、导入和下载产物，HTTP 200或Actions配置存在不等于发布完成。后续无关文档提交可不重建站点，线上身份以构建清单对应的源码提交为准，不要求与文档提交保持相同哈希。
