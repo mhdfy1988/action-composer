@@ -1,5 +1,11 @@
 # 首里程碑验证记录
 
+## 2026-10-20 部署后文档口径收口
+
+- README明确test:browser的本地默认入口与显式测试地址；任务清单将首里程碑目标及工程保存记录标为历史，当前指针区分人工帧修正与仅保留实验的自动纵向补偿；提交准备同步已部署状态，不改写旧阶段事实。
+- 本轮重新运行format:check、check:source、56项测试、build、test:components、test:browser，全部通过。浏览器回归使用既有8914和隔离Chrome，不重启服务或刷新用户页面；未指定私人素材夹具。仅修改说明文档，未更改功能、版本或部署配置。
+- 线上build-info.json仍对应部署源码879e20b，与上节部署验收范围一致；文档提交不触发重新部署，不能用仓库最新文档提交替代站点源码身份。
+
 ## 2026-10-20 GitHub Pages部署与线上验收（当前）
 
 - 在线入口：[动作编排](https://mhdfy1988.github.io/action-composer/)。发布源码提交为`879e20b749a8235d96859ab6fa4a9323b48d425f`，[Actions运行39412183408](https://github.com/mhdfy1988/action-composer/actions/runs/39412183408)构建与部署均成功。包版本仍为0.1.0，没有创建版本标签或GitHub Release，也没有接入动作工坊。

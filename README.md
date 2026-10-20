@@ -122,7 +122,7 @@ npm.cmd run test:pages
 
 [Pages工作流](.github/workflows/pages.yml)在main相关源码变化时执行检查、构建和静态子路径验收，再上传白名单产物并部署；纯说明文档修改不触发重新部署，可手动执行工作流。`build-info.json`记录被部署的源码提交及文件摘要，部署状态以[Actions运行结果](https://github.com/mhdfy1988/action-composer/actions/workflows/pages.yml)和实际线上验收为准，不以本地构建成功代替。
 
-浏览器测试要求 8914 已运行，使用隔离 Chrome，不刷新用户页面；通过正式 UI、实际下载 ZIP／PNG 和像素回读验证，不注入内部会话，也不保留隐藏工程控件。可用 `ACTION_COMPOSER_REAL_FIXTURE` 指定私人样例目录，截图／下载放在忽略的 `output/`，不分发私人素材。
+`test:browser`默认访问本地8914，须先启动该服务；显式设置`ACTION_COMPOSER_TEST_URL`时则访问指定入口，无需本地8914。测试使用隔离Chrome，不刷新用户页面；通过正式UI、实际下载ZIP／PNG和像素回读验证，不注入内部会话，也不保留隐藏工程控件。可用`ACTION_COMPOSER_REAL_FIXTURE`指定私人样例目录，截图／下载放在忽略的`output/`，不分发私人素材。
 
 `test:components`同样需要8914和Chrome，在隔离页面加载组件公开接口，验证参数面板多实例隔离、局部输入绑定、工具栏意图／禁用、帧节点身份、弹窗取消重开、导出参数及窄屏样式；不启动或注入工作台会话。组件契约测试与正式入口黑盒回归分别证明局部边界和真实装配。
 

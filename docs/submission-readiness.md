@@ -1,6 +1,6 @@
 # 提交准备与代码边界
 
-2026-10-20；包版本`0.1.0`，无版本标签或Release。源码已提交公开仓库[mhdfy1988/action-composer](https://github.com/mhdfy1988/action-composer)，主分支`main`；用户追加授权部署GitHub Pages，范围仅本项目，不修改其他项目。
+2026-10-20；包版本`0.1.0`，无版本标签或Release。源码已提交公开仓库[mhdfy1988/action-composer](https://github.com/mhdfy1988/action-composer)，主分支`main`；[GitHub Pages站点](https://mhdfy1988.github.io/action-composer/)已部署并完成线上闭环验收，发布提交与证据见[验证记录](verification.md)。范围仅本项目，不修改其他项目。
 
 ## 当前代码边界
 
