@@ -1,0 +1,26 @@
+dialog {
+  width: 440px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 25px;
+  color: inherit;
+  box-shadow: 0 15px 80px #18324c26;
+}
+dialog::backdrop {
+  background: #1a253b44;
+}
+dialog h2 {
+  font-size: 17px;
+}
+dialog p {
+  line-height: 1.8;
+}
+.dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 23px;
+}

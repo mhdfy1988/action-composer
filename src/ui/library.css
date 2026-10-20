@@ -1,0 +1,123 @@
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 14px 12px;
+}
+.panel-heading h2 {
+  margin: 0;
+}
+.group-list {
+  padding: 0 10px;
+  display: grid;
+  gap: 7px;
+}
+.action-row > input {
+  flex: none;
+  margin: 0 0 0 3px;
+  width: 15px;
+  height: 15px;
+}
+.group-item small {
+  color: var(--muted);
+  font:
+    11px Consolas,
+    monospace;
+}
+.library {
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  position: relative;
+}
+.action-row .group-item {
+  flex: 1;
+  min-width: 0;
+  cursor: grab;
+}
+.action-row.action-dragging {
+  opacity: 0.5;
+}
+.action-row.action-before::before,
+.action-row.action-after::after {
+  content: '';
+  position: absolute;
+  left: 26px;
+  right: 0;
+  height: 2px;
+  background: var(--blue);
+  pointer-events: none;
+  z-index: 2;
+}
+.action-row.action-before::before {
+  top: 0;
+}
+.action-row.action-after::after {
+  bottom: 0;
+}
+.action-tools {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  gap: 3px;
+  opacity: 0;
+  background: transparent;
+}
+.action-row:hover .action-tools,
+.action-row:focus-within .action-tools {
+  opacity: 1;
+}
+.action-tools .icon-button {
+  flex-basis: 20px;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  background: transparent;
+  color: #8492a2;
+}
+.action-tools .icon-button:hover:not(:disabled) {
+  background: #306ca90a;
+  color: var(--blue);
+}
+.action-row .group-item small {
+  padding-right: 44px;
+}
+.action-tools svg {
+  width: 18px;
+  height: 18px;
+}
+@media (hover: none) {
+  .action-tools {
+    opacity: 1;
+  }
+}
+.group-item {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px;
+  white-space: normal;
+  word-break: break-all;
+  border-color: transparent;
+  border-radius: 4px;
+}
+.group-item[aria-pressed='true'] {
+  border-color: transparent;
+  box-shadow: inset 3px 0 var(--blue);
+}
+@media (max-width: 760px) {
+  .library {
+    height: auto;
+    grid-row: 1 / 3;
+  }
+}

@@ -1,0 +1,139 @@
+:root {
+  font-family: 'Microsoft YaHei UI', 'PingFang SC', sans-serif;
+  color: #24303b;
+  background: #f8f9fb;
+  font-size: 13px;
+  --line: #e1e6ec;
+  --muted: #74808e;
+  --blue: #306ca9;
+  --soft: #edf4fc;
+}
+* {
+  box-sizing: border-box;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  background: #fff;
+  color: inherit;
+  border: 1px solid #d7dfe8;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+button:hover:not(:disabled) {
+  background: #f2f6fa;
+  border-color: #9ab5cf;
+}
+button.primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+button.primary:hover:not(:disabled) {
+  background: #285d94;
+  border-color: #285d94;
+  color: white;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+button[aria-pressed='true'] {
+  background: var(--soft);
+  color: #235c96;
+  border-color: #99b7d6;
+}
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #3d82c8;
+  outline-offset: 3px;
+}
+input:not([type='checkbox']):not([type='range']) {
+  width: 100%;
+  border: 1px solid #d9e0e8;
+  border-radius: 4px;
+  padding: 8px 9px;
+  color: inherit;
+  background: #fff;
+}
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d9e0e8;
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+}
+input[type='range'] {
+  accent-color: var(--blue);
+  min-width: 0;
+}
+input[type='checkbox'] {
+  accent-color: var(--blue);
+}
+input:disabled {
+  opacity: 0.5;
+}
+.spacer {
+  flex: 1;
+}
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+h2 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 18px;
+}
+output {
+  font:
+    12px Consolas,
+    monospace;
+  white-space: nowrap;
+}
+fieldset {
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 17px;
+  font-size: 12px;
+}
+[hidden] {
+  display: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+}
+[data-icon] svg,
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  pointer-events: none;
+}
+.text-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}

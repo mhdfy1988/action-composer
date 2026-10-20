@@ -1,0 +1,9 @@
+node_modules/
+dist/
+output/
+package-lock.json
+assets/private/
+.cache/
+coverage/
+test-results/
+playwright-report/

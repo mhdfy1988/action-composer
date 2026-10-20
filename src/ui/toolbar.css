@@ -1,0 +1,116 @@
+.toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 0 5px;
+  flex-direction: row;
+}
+.toolbar {
+  flex-wrap: wrap;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.toolbar strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  max-width: 220px;
+  flex-shrink: 1;
+}
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.toolbar-group + .toolbar-group {
+  border-left: 1px solid var(--line);
+  padding-left: 10px;
+  margin-left: 4px;
+}
+.toolbar .axis-locks label {
+  margin: 0;
+  padding: 4px 1px;
+  white-space: nowrap;
+}
+.toolbar .axis-locks input {
+  margin: 0;
+}
+.toolbar button {
+  padding: 6px 9px;
+}
+.toolbar .icon-button {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+.toolbar label.icon-toggle,
+.toolbar .axis-locks label.icon-toggle {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #d7dfe8;
+  border-radius: 5px;
+  color: #435263;
+  background: #fff;
+  cursor: pointer;
+}
+.icon-toggle input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.icon-toggle:hover:not(:has(input:disabled)) {
+  background: #f2f6fa;
+  border-color: #9ab5cf;
+}
+.toolbar label.icon-toggle:has(input:checked) {
+  background: var(--soft);
+  color: #235c96;
+  border-color: #99b7d6;
+}
+.icon-toggle:has(input:focus-visible) {
+  outline: 2px solid #3d82c8;
+  outline-offset: 3px;
+}
+.icon-toggle:has(input:disabled) {
+  opacity: 0.4;
+  cursor: default;
+}
+.toolbar label.icon-toggle.compact-tool,
+.toolbar .axis-locks label.icon-toggle.compact-tool,
+.toolbar button.compact-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: auto;
+  height: 32px;
+  gap: 5px;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+.compact-tool > span {
+  pointer-events: none;
+}

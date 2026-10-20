@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>首帧配准实验 · 动作编排</title>
+    <link rel="stylesheet" href="./lab.css" />
+  </head>
+  <body>
+    <header>
+      <strong>首帧配准实验</strong><span>独立小样 · 不修改工程</span
+      ><output id="runtime">加载 OpenCV…</output>
+    </header>
+    <main>
+      <aside>
+        <h2>参照区域</h2>
+        <canvas id="reference" width="280" height="390" aria-label="拖动框选参照区域"></canvas>
+        <p class="hint">默认包含完整角色、头顶和脚底，可拖动重新框选。</p>
+        <button id="whole" class="whole-button">全身</button>
+        <div class="pair">
+          <button id="head">辅助：头部</button><button id="torso">辅助：躯干</button>
+        </div>
+        <label>参照图片<input id="referenceFile" type="file" accept="image/png" /></label>
+        <label>动作帧<input id="framesFile" type="file" accept="image/png" multiple /></label>
+        <button id="sample">载入浣熊示例</button>
+      </aside>
+      <section class="work">
+        <nav>
+          <button id="contour" aria-pressed="true">轮廓对齐</button>
+          <button id="template" aria-pressed="false" disabled>区域匹配</button>
+          <label><input id="showReference" type="checkbox" checked />参照叠加</label>
+        </nav>
+        <canvas id="stage" aria-label="配准结果叠加预览"></canvas>
+        <footer>
+          <button id="play">播放</button
+          ><input id="frame" type="range" min="0" max="12" value="0" /><output id="frameInfo"
+            >1 / 13</output
+          >
+        </footer>
+      </section>
+      <aside>
+        <h2>多尺度模板匹配</h2>
+        <label
+          >比较内容<select id="representation">
+            <option value="edge">灰度梯度（边缘）</option>
+            <option value="gray">灰度纹理</option>
+          </select></label
+        >
+        <div class="pair">
+          <label
+            >最小倍率<input
+              id="minScale"
+              type="number"
+              min="0.1"
+              max="10"
+              step="0.1"
+              value="1.5" /></label
+          ><label
+            >最大倍率<input id="maxScale" type="number" min="0.1" max="10" step="0.1" value="4"
+          /></label>
+        </div>
+        <button class="primary" id="run" disabled>计算首帧匹配</button>
+        <button id="cancel" hidden>取消计算</button>
+        <output id="progress" role="status"></output>
+        <section class="result">
+          <h3>轮廓对齐</h3>
+          <p id="baseline">—</p>
+        </section>
+        <section class="result">
+          <h3>首帧全身检查</h3>
+          <p id="bodyCheck">—</p>
+          <p class="hint">按完整前景轮廓测量，不是身体标点；尾巴或武器仍可能影响范围。</p>
+        </section>
+        <section class="result">
+          <h3>区域匹配</h3>
+          <p id="matched">尚未计算</p>
+          <p id="quality" class="hint"></p>
+        </section>
+        <p class="hint">
+          只计算首帧，整组共用缩放和平移。相似度不是成功概率；局部贴合不代表全身比例正确。
+        </p>
+        <button id="report" disabled>下载实验记录</button>
+      </aside>
+    </main>
+    <script type="module" src="./lab.js"></script>
+  </body>
+</html>

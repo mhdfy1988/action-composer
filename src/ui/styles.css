@@ -1,0 +1,11 @@
+/* 基础规则先加载；局部变体由所属组件覆盖，不依赖旧文件的追加补丁。 */
+@import './styles/base.css';
+@import './styles/shell.css';
+@import './header.css';
+@import './library.css';
+@import './toolbar.css';
+@import './viewport.css';
+@import './inspector.css';
+@import './timeline.css';
+@import './styles/dialogs.css';
+@import './import-dialog.css';

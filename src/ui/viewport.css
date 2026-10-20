@@ -1,0 +1,49 @@
+.viewport canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  touch-action: none;
+  cursor: grab;
+}
+#empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#empty[hidden] {
+  display: none;
+}
+#empty strong {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+}
+#empty p {
+  color: #f0f0f0;
+  margin: 14px 0 24px;
+}
+#empty button {
+  pointer-events: auto;
+}
+.view-info {
+  position: absolute;
+  bottom: 12px;
+  left: 15px;
+  color: var(--muted);
+  font:
+    11px Consolas,
+    monospace;
+  pointer-events: none;
+}
+.viewport {
+  flex: 1;
+  position: relative;
+  min-height: 180px;
+  overflow: hidden;
+  background: #f5f6f8;
+}
